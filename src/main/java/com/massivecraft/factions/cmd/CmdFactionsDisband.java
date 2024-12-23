@@ -19,74 +19,74 @@ import com.massivecraft.massivecore.util.Txt;
 public class CmdFactionsDisband extends FactionsCommand
 {
 	// -------------------------------------------- //
-	// CONSTRUCT
+	// CONSTRUCTION
 	// -------------------------------------------- //
 	
 	public CmdFactionsDisband()
 	{
-		// Aliases
+		// Alias
 		this.addAliases("disband");
 
-		// Args
+		// Arguments
 		this.addOptionalArg("faction", "you");
 
-		// Requirements
+		// Conditions requises
 		this.addRequirements(ReqHasPerm.get(Perm.DISBAND.node));
 	}
 
 	// -------------------------------------------- //
-	// OVERRIDE
+	// SURCHARGE
 	// -------------------------------------------- //
 	
 	@Override
 	public void perform()
 	{
-		// Args
+		// Arguments
 		Faction faction = this.arg(0, ARFaction.get(), msenderFaction);
 		if (faction == null) return;
 		
-		// MPerm
+		// Permission
 		if ( ! MPerm.getPermDisband().has(msender, faction, true)) return;
 
-		// Verify
+		// Vérification
 		if (faction.getFlag(MFlag.getFlagPermanent()))
 		{
-			msg("<i>This faction is designated as permanent, so you cannot disband it.");
+			msg("<i>Ce pays est permanente, vous ne pouvez donc pas le disband.");
 			return;
 		}
 
-		// Event
+		// Événement
 		EventFactionsDisband event = new EventFactionsDisband(me, faction);
 		event.run();
 		if (event.isCancelled()) return;
 
-		// Merged Apply and Inform
+		// Fusion des actions et des informations
 		
-		// Run event for each player in the faction
+		// Exécuter l'événement pour chaque joueur de la faction
 		for (MPlayer mplayer : faction.getMPlayers())
 		{
 			EventFactionsMembershipChange membershipChangeEvent = new EventFactionsMembershipChange(sender, mplayer, FactionColl.get().getNone(), MembershipChangeReason.DISBAND);
 			membershipChangeEvent.run();
 		}
 
-		// Inform
+		// Informer
 		for (MPlayer mplayer : faction.getMPlayersWhereOnline(true))
 		{
-			mplayer.msg("<h>%s<i> disbanded your faction.", msender.describeTo(mplayer));
+			mplayer.msg("<h>%s<i> a disband votre pays.", msender.describeTo(mplayer));
 		}
 		
 		if (msenderFaction != faction)
 		{
-			msender.msg("<i>You disbanded <h>%s<i>." , faction.describeTo(msender));
+			msender.msg("<i>Vous avez disband <h>%s<i>.", faction.describeTo(msender));
 		}
 		
-		// Log
+		// Journaliser
 		if (MConf.get().logFactionDisband)
 		{
-			Factions.get().log(Txt.parse("<i>The faction <h>%s <i>(<h>%s<i>) was disbanded by <h>%s<i>.", faction.getName(), faction.getId(), msender.getDisplayName(IdUtil.getConsole())));
+			Factions.get().log(Txt.parse("<i>Le pays <h>%s <i>(<h>%s<i>) a été disband par <h>%s<i>.", faction.getName(), faction.getId(), msender.getDisplayName(IdUtil.getConsole())));
 		}		
 		
-		// Apply
+		// Appliquer
 		faction.detach();
 	}
 	
