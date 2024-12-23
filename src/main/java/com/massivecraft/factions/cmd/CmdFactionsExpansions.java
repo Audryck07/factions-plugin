@@ -10,33 +10,33 @@ import com.massivecraft.massivecore.util.Txt;
 public class CmdFactionsExpansions extends FactionsCommand
 {
 	// -------------------------------------------- //
-	// CONSTRUCT
+	// CONSTRUCTION
 	// -------------------------------------------- //
 	
 	public CmdFactionsExpansions()
 	{
-		// Aliases
+		// Alias
 		this.addAliases("e", "expansions");
 
-		// Requirements
+		// Conditions requises
 		this.addRequirements(ReqHasPerm.get(Perm.EXPANSIONS.node));
 	}
 
 	// -------------------------------------------- //
-	// OVERRIDE
+	// SURCHARGE
 	// -------------------------------------------- //
 	
 	@Override
 	public void perform()
 	{
-		// Event
+		// Événement
 		EventFactionsExpansions event = new EventFactionsExpansions(sender);
 		event.run();
 		
-		// Title
-		msg(Txt.titleize("Factions Expansions"));
+		// Titre
+		msg(Txt.titleize("Extensions de Factions"));
 		
-		// Lines
+		// Lignes
 		for (Entry<String, Boolean> entry : event.getExpansions().entrySet())
 		{
 			String name = entry.getKey();
@@ -45,9 +45,9 @@ public class CmdFactionsExpansions extends FactionsCommand
 			msg(format, name);
 		}
 		
-		// URL Suggestion
-		msg("<i>Learn all about expansions in the online documentation:");
-		msg("<aqua>http://www.massivecraft.com/factions");
+		// Suggestion de lien
+		msg("<i>Apprenez tout sur les expansions sur notre wiki :");
+		msg("<aqua>https://wiki.redstonia.com");
 	}
 	
 }
