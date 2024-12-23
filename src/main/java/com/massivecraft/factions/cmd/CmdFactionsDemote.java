@@ -9,66 +9,63 @@ import com.massivecraft.massivecore.cmd.req.ReqHasPerm;
 public class CmdFactionsDemote extends FactionsCommand
 {
 	// -------------------------------------------- //
-	// CONSTRUCT
+	// CONSTRUCTION
 	// -------------------------------------------- //
 	
 	public CmdFactionsDemote()
 	{
-		// Aliases
+		// Alias
 		this.addAliases("demote");
 
-		// Args
+		// Arguments
 		this.addRequiredArg("player");
 
-		// Requirements
+		// Conditions requises
 		this.addRequirements(ReqHasPerm.get(Perm.DEMOTE.node));
 		
-		//To demote someone from member -> recruit you must be an officer.
-		//To demote someone from officer -> member you must be a leader.
-		//We'll handle this internally
 	}
 
 	// -------------------------------------------- //
-	// OVERRIDE
+	// SURCHARGE
 	// -------------------------------------------- //
 	
 	@Override
 	public void perform()
 	{	
-		MPlayer you = this.arg(0, ARMPlayer.getAny());
-		if (you == null) return;
+		MPlayer cible = this.arg(0, ARMPlayer.getAny());
+		if (cible == null) return;
 		
-		if (you.getFaction() != msenderFaction)
+		if (cible.getFaction() != msenderFaction)
 		{
-			msg("%s<b> is not a member in your faction.", you.describeTo(msender, true));
+			msg("%s<b> n'est pas membre de votre pays.", cible.describeTo(msender, true));
 			return;
 		}
 		
-		if (you == msender)
+		if (cible == msender)
 		{
-			msg("<b>The target player mustn't be yourself.");
+			msg("<b>Le joueur cible ne peut pas être vous-même.");
 			return;
 		}
 
-		if (you.getRole() == Rel.MEMBER)
+		if (cible.getRole() == Rel.MEMBER)
 		{
 			if (!msender.getRole().isAtLeast(Rel.OFFICER))
 			{
-				msg("<b>You must be an officer to demote a member to recruit.");
+				msg("<b>Vous devez être officier pour rétrograder un membre en recrue.");
 				return;
 			}
-			you.setRole(Rel.RECRUIT);
-			msenderFaction.msg("%s<i> was demoted to being a recruit in your faction.", you.describeTo(msenderFaction, true));
+			cible.setRole(Rel.RECRUIT);
+			msenderFaction.msg("%s<i> a été rétrogradé au rang de recrue dans votre pays.", cible.describeTo(msenderFaction, true));
 		}
-		else if (you.getRole() == Rel.OFFICER)
+		else if (cible.getRole() == Rel.OFFICER)
 		{
 			if (!msender.getRole().isAtLeast(Rel.LEADER))
 			{
-				msg("<b>You must be the leader to demote an officer to member.");
+				msg("<b>Vous devez être le chef pour rétrograder un officier en membre.");
 				return;
 			}
-			you.setRole(Rel.MEMBER);
-			msenderFaction.msg("%s<i> was demoted to being a member in your faction.", you.describeTo(msenderFaction, true));
+			cible.setRole(Rel.MEMBER);
+			msenderFaction.msg("%s<i> a été rétrogradé au rang de membre dans votre pays.", cible.describeTo(msenderFaction, true));
 		}
 	}
 	
