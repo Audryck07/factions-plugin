@@ -11,49 +11,49 @@ import com.massivecraft.massivecore.mixin.Mixin;
 public class CmdFactionsDescription extends FactionsCommand
 {
 	// -------------------------------------------- //
-	// CONSTRUCT
+	// CONSTRUCTION
 	// -------------------------------------------- //
 	
 	public CmdFactionsDescription()
 	{
-		// Aliases
+		// Alias
 		this.addAliases("desc");
 
-		// Args
+		// Arguments
 		this.addRequiredArg("desc");
 		this.setErrorOnToManyArgs(false);
 
-		// Requirements
+		// Conditions requises
 		this.addRequirements(ReqHasPerm.get(Perm.DESCRIPTION.node));
 		this.addRequirements(ReqHasFaction.get());
 	}
 
 	// -------------------------------------------- //
-	// OVERRIDE
+	// SURCHARGE
 	// -------------------------------------------- //
 	
 	@Override
 	public void perform()
 	{	
-		// Args
-		String newDescription = this.argConcatFrom(0);
+		// Arguments
+		String nouvelleDescription = this.argConcatFrom(0);
 		
-		// MPerm
+		// Permission
 		if ( ! MPerm.getPermDesc().has(msender, msenderFaction, true)) return;
 		
-		// Event
-		EventFactionsDescriptionChange event = new EventFactionsDescriptionChange(sender, msenderFaction, newDescription);
+		// Événement
+		EventFactionsDescriptionChange event = new EventFactionsDescriptionChange(sender, msenderFaction, nouvelleDescription);
 		event.run();
 		if (event.isCancelled()) return;
-		newDescription = event.getNewDescription();
+		nouvelleDescription = event.getNewDescription();
 
-		// Apply
-		msenderFaction.setDescription(newDescription);
+		// Appliquer
+		msenderFaction.setDescription(nouvelleDescription);
 		
-		// Inform
-		for (MPlayer follower : msenderFaction.getMPlayers())
+		// Informer
+		for (MPlayer membre : msenderFaction.getMPlayers())
 		{
-			follower.msg("<i>%s <i>set your faction description to:\n%s", Mixin.getDisplayName(sender, follower), msenderFaction.getDescription());
+			membre.msg("<i>%s <i>a changer la description de votre pays pour :\n%s", Mixin.getDisplayName(sender, membre), msenderFaction.getDescription());
 		}
 	}
 	
