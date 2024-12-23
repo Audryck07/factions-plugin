@@ -52,11 +52,12 @@ public abstract class CmdFactionsAccessAbstract extends FactionsCommand
 
 	public void sendAccessInfo()
 	{
-		sendMessage(Txt.titleize("Access at " + chunk.toString(PSFormatHumanSpace.get())));
-		msg("<k>Host Faction: %s", hostFaction.describeTo(msender, true));
-		msg("<k>Host Faction Allowed: %s", ta.isHostFactionAllowed() ? Txt.parse("<lime>TRUE") : Txt.parse("<rose>FALSE"));
-		msg("<k>Granted Players: %s", describeRelationParticipators(ta.getGrantedMPlayers(), msender));
-		msg("<k>Granted Factions: %s", describeRelationParticipators(ta.getGrantedFactions(), msender));
+		sendMessage(Txt.titleize("Accès à " + chunk.toString(PSFormatHumanSpace.get())));
+		msg("<k>Faction Hôte : %s", hostFaction.describeTo(msender, true));
+		msg("<k>Faction Hôte Autorisée : %s", ta.isHostFactionAllowed() ? Txt.parse("<lime>VRAI") : Txt.parse("<rose>FAUX"));
+		msg("<k>Joueurs Autorisés : %s", describeRelationParticipators(ta.getGrantedMPlayers(), msender));
+		msg("<k>Factions Autorisées : %s", describeRelationParticipators(ta.getGrantedFactions(), msender));
+
 	}
 	
 	public static String describeRelationParticipators(Collection<? extends RelationParticipator> relationParticipators, RelationParticipator observer)
