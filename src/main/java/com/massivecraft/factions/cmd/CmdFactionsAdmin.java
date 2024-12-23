@@ -10,42 +10,42 @@ import com.massivecraft.massivecore.util.Txt;
 public class CmdFactionsAdmin extends FactionsCommand
 {
 	// -------------------------------------------- //
-	// CONSTRUCT
+	// CONSTRUCTION
 	// -------------------------------------------- //
 	
 	public CmdFactionsAdmin()
 	{
-		// Aliases
+		// Alias
 		this.addAliases("admin");
 
-		// Args
+		// Arguments
 		this.addOptionalArg("on/off", "flip");
 		
-		// Requirements
+		// Conditions requises
 		this.addRequirements(ReqHasPerm.get(Perm.ADMIN.node));
 	}
 
 	// -------------------------------------------- //
-	// OVERRIDE
+	// SURCHARGE
 	// -------------------------------------------- //
 	
 	@Override
 	public void perform()
 	{
-		// Args
-		Boolean target = this.arg(0, ARBoolean.get(), !msender.isUsingAdminMode());
-		if (target == null) return;
+		// Arguments
+		Boolean cible = this.arg(0, ARBoolean.get(), !msender.isUsingAdminMode());
+		if (cible == null) return;
 		
-		// Apply
-		msender.setUsingAdminMode(target);		
+		// Appliquer
+		msender.setUsingAdminMode(cible);		
 		
-		// Inform
-		String desc = Txt.parse(msender.isUsingAdminMode() ? "<g>ENABLED" : "<b>DISABLED");
+		// Informer
+		String desc = Txt.parse(msender.isUsingAdminMode() ? "<g>ACTIVÉ" : "<b>DÉSACTIVÉ");
 		
-		String messageYou = Txt.parse("<i>%s %s <i>admin bypass mode.", msender.getDisplayName(msender), desc);
-		String messageLog = Txt.parse("<i>%s %s <i>admin bypass mode.", msender.getDisplayName(IdUtil.getConsole()), desc);
+		String messageVous = Txt.parse("<i>%s %s <i>le mode administrateur bypass.", msender.getDisplayName(msender), desc);
+		String messageLog = Txt.parse("<i>%s %s <i>le mode administrateur bypass.", msender.getDisplayName(IdUtil.getConsole()), desc);
 		
-		msender.sendMessage(messageYou);
+		msender.sendMessage(messageVous);
 		Factions.get().log(messageLog);
 	}
 	
